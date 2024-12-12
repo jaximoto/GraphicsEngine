@@ -2,8 +2,8 @@
 #include <GLFW/glfw3.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#include "shader.h"
+#include "../includes/stb_image.h"
+#include "../includes/shader.h"
 #include <cmath>
 #include <iostream>
 
@@ -26,7 +26,7 @@ int main(){
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "WindowBitch", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 600, "Textures", NULL, NULL);
 	if (window == NULL){
 		std::cout << "Failed to create window" << std::endl;
 		glfwTerminate();
@@ -56,11 +56,11 @@ int main(){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	// Set filtering to interpolate texels for texture coords when magnifying and minimizing texture
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int width, height, nrChannels;
-	unsigned char *data = stbi_load("resources/container.jpeg", &width, &height, &nrChannels, 0);
+	unsigned char *data = stbi_load("../resources/container.jpg", &width, &height, &nrChannels, 0);
 	if(data){
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -118,7 +118,7 @@ int main(){
 	glEnableVertexAttribArray(1);
 
 	// texture coords
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(8 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 	
 	// LETS GOOO Render Loop!
@@ -127,14 +127,15 @@ int main(){
 		ProcessInput(window);
 
 		//rendering commands
-		myShader.use();
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 
 		// Draw Triangle
+		glBindTexture(GL_TEXTURE_2D, texture);
+		myShader.use();
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
 
@@ -149,6 +150,7 @@ int main(){
 
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1,&EBO);
 	glfwTerminate();
 	return 0;
 }

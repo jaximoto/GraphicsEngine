@@ -60,6 +60,7 @@ class Shader{
 			glShaderSource(vertex, 1, &vShaderCode, NULL);
 			glCompileShader(vertex);
 			// print errors
+			glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
 			if(!success){
 				glGetShaderInfoLog(vertex, 512, NULL, infoLog);
 				std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog <<std::endl;
@@ -70,6 +71,7 @@ class Shader{
 			glShaderSource(fragment, 1, &fShaderCode, NULL);
 			glCompileShader(fragment);
 			// print errors
+			glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
 			if(!success){
 				glGetShaderInfoLog(fragment, 512, NULL, infoLog);
 				std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog <<std::endl;
