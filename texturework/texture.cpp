@@ -47,9 +47,9 @@ int main(){
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	// Load Texture
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	unsigned int texture1, texture2;
+	glGenTextures(1, &texture1);
+	glBindTexture(GL_TEXTURE_2D, texture1);
 
 	// Set texture wrapping and filtering options
 	// Set wrapping for both S and T axis to repeat the texture outside the range 
@@ -60,6 +60,7 @@ int main(){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true); 
 	unsigned char *data = stbi_load("../resources/container.jpg", &width, &height, &nrChannels, 0);
 	if(data){
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -69,6 +70,25 @@ int main(){
 		std::cout << "Failed to load texture" << std::endl;
 	}
 
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+
+	// Set texture wrapping and filtering options
+	// Set wrapping for both S and T axis to repeat the texture outside the range 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// Set filtering to interpolate texels for texture coords when magnifying and minimizing texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	data = stbi_load("../resources/awesomeface.png", &width, &height, &nrChannels, 0);
+	if(data){
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else{
+		std::cout << "Failed to load texture" << std::endl;
+	}
 	stbi_image_free(data);
 
 	// Shader
@@ -132,8 +152,15 @@ int main(){
 		
 
 		// Draw Triangle
-		glBindTexture(GL_TEXTURE_2D, texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+
 		myShader.use();
+		myShader.setInt("texture1", 0);
+		myShader.setInt("texture2", 1);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
