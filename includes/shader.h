@@ -1,4 +1,4 @@
-#ifndef SHADeR_H
+#ifndef SHADER_H
 #define SHADER_H
 
 #include <glad/glad.h>
@@ -35,16 +35,16 @@ class Shader{
 
 				// Read file buffer content into streams
 				vShaderStream << vShaderFile.rdbuf();
-				fShaderStream << fShaderFile.rdbuff();
+				fShaderStream << fShaderFile.rdbuf();
 				// Close file handlers
 				vShaderFile.close();
 				fShaderFile.close();
 
 				// convert stream into string
 				vertexCode = vShaderStream.str();
-				fragmentCode = fShaderStream.str(;)
+				fragmentCode = fShaderStream.str();
 			}
-			catch(std::ifstream::failure e){
+			catch(std::ifstream::failure& e){
 				std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ" << std::endl;
 			}
 			const char* vShaderCode = vertexCode.c_str();
@@ -60,17 +60,17 @@ class Shader{
 			glShaderSource(vertex, 1, &vShaderCode, NULL);
 			glCompileShader(vertex);
 			// print errors
-			if(!sucess){
+			if(!success){
 				glGetShaderInfoLog(vertex, 512, NULL, infoLog);
 				std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog <<std::endl;
 			}
 
 			// fragment Shader
-			fragment = glCreateShader(GL_VERTEX_SHADER);
+			fragment = glCreateShader(GL_FRAGMENT_SHADER);
 			glShaderSource(fragment, 1, &fShaderCode, NULL);
 			glCompileShader(fragment);
 			// print errors
-			if(!sucess){
+			if(!success){
 				glGetShaderInfoLog(fragment, 512, NULL, infoLog);
 				std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog <<std::endl;
 			}
@@ -99,16 +99,15 @@ class Shader{
 
 		// utility uniform functions
 		void setBool(const std::string &name, bool value)const{
-			glUniformli(glGetUniformLocation(ID, name.c_str()), int(value));
+			glUniform1i(glGetUniformLocation(ID, name.c_str()), int(value));
 		}
 		void setInt(const std::string &name, int value)const{
-			glUniformli(glGetUniformLocation(ID, name.c_str()), value);
+			glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 		}
 		void setFloat(const std::string &name, float value)const{
-			glUniformli(glGetUniformLocation(ID, name.c_str()), value);
+			glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 		}
 
 };
 
 #endif
-		
