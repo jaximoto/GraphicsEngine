@@ -220,7 +220,7 @@ int main(){
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version330");
+	ImGui_ImplOpenGL3_Init("#version 330");
 
 
 	// LETS GOOO Render Loop!
@@ -235,6 +235,11 @@ int main(){
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
+		//imgui
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
 		
 		// Draw Triangle
 		glActiveTexture(GL_TEXTURE0);
@@ -246,7 +251,7 @@ int main(){
 		myShader.use();
 		myShader.setInt("texture1", 0);
 		myShader.setInt("displacementMap", 1);
-		myShader.setFloat("displacementScale", 0.05f);
+		myShader.setFloat("displacementScale", 1.0f);
 
 		
 		
@@ -278,13 +283,24 @@ int main(){
 
 
 
+		// More imgui
+		ImGui::SetNextWindowSize(ImVec2(200, 50)); // Set the initial size (width, height) in pixels
+		ImGui::SetNextWindowPos(ImVec2(0, 0));
+		ImGui::Begin("Hello Window");
+		ImGui::Text("Hello World");
+		ImGui::End();
 
-
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		// check and call events and swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
