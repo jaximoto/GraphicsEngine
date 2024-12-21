@@ -138,7 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Downloads\glad\src\glad.c" />
-    <ClCompile Include="camera\src.cpp" />
+    <ClCompile Include="scrollingTexture\src.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
