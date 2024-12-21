@@ -1,3 +1,6 @@
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -41,7 +44,7 @@ int main(){
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "Textures", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 600, "Your Mom", NULL, NULL);
 	if (window == NULL){
 		std::cout << "Failed to create window" << std::endl;
 		glfwTerminate();
@@ -98,7 +101,7 @@ int main(){
 		std::cout << "Failed to load texture" << std::endl;
 	}
 
-	/*
+	
 	glGenTextures(1, &texture2);
 	glBindTexture(GL_TEXTURE_2D, texture2);
 
@@ -111,21 +114,21 @@ int main(){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
 #ifdef _WIN32
-	 data = stbi_load("./resources/jabbuWall.png", &width, &height, &nrChannels, STBI_rgb_alpha);
+	 data = stbi_load("./resources/waterDisplacement.jpg", &width, &height, &nrChannels, 0);
 
 #else
-	 data = stbi_load("../resources/jabbuWall.png", &width, &height, &nrChannels, STBI_rgb_alpha);
+	 data = stbi_load("../resources/waterDisplacement.jpg", &width, &height, &nrChannels, 0);
 #endif
 	
 	if(data){
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else{
 		std::cout << "Failed to load texture" << std::endl;
 	}
 	stbi_image_free(data);
-	*/
+	
 	// Shader
 #ifdef _WIN32
 	Shader myShader("./scrollingTexture/shader.vs", "./scrollingTexture/shader.fs");
@@ -211,6 +214,15 @@ int main(){
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 	
+	// Check imGui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version330");
+
+
 	// LETS GOOO Render Loop!
 	while(!glfwWindowShouldClose(window)){
 		float currentFrame = glfwGetTime();
@@ -228,13 +240,13 @@ int main(){
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
 
-		//glActiveTexture(GL_TEXTURE1);
-		//glBindTexture(GL_TEXTURE_2D, texture2);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
 
 		myShader.use();
 		myShader.setInt("texture1", 0);
-		
-		//myShader.setInt("texture2", 1);
+		myShader.setInt("displacementMap", 1);
+		myShader.setFloat("displacementScale", 0.05f);
 
 		
 		

@@ -112,6 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Jaxon\github\graphicsEngine\glfw-3.4\include\imGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,6 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Jaxon\github\graphicsEngine\glfw-3.4\include\imGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,7 +140,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Downloads\glad\src\glad.c" />
+    <ClCompile Include="glfw-3.4\include\imGui\imgui.cpp" />
+    <ClCompile Include="glfw-3.4\include\imGui\imgui_demo.cpp" />
+    <ClCompile Include="glfw-3.4\include\imGui\imgui_draw.cpp" />
+    <ClCompile Include="glfw-3.4\include\imGui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="glfw-3.4\include\imGui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="glfw-3.4\include\imGui\imgui_tables.cpp" />
+    <ClCompile Include="glfw-3.4\include\imGui\imgui_widgets.cpp" />
     <ClCompile Include="scrollingTexture\src.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="glfw-3.4\include\imGui\imconfig.h" />
+    <ClInclude Include="glfw-3.4\include\imGui\imgui.h" />
+    <ClInclude Include="glfw-3.4\include\imGui\imgui_impl_glfw.h" />
+    <ClInclude Include="glfw-3.4\include\imGui\imgui_impl_opengl3.h" />
+    <ClInclude Include="glfw-3.4\include\imGui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="glfw-3.4\include\imGui\imgui_internal.h" />
+    <ClInclude Include="glfw-3.4\include\imGui\imstb_rectpack.h" />
+    <ClInclude Include="glfw-3.4\include\imGui\imstb_textedit.h" />
+    <ClInclude Include="glfw-3.4\include\imGui\imstb_truetype.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
